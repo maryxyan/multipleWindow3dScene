@@ -6,7 +6,7 @@ const t = THREE;
 let camera, scene, renderer, world;
 let near, far;
 let pixR = window.devicePixelRatio ? window.devicePixelRatio : 1;
-let cubes = [];
+let triangles = [];
 let sceneOffsetTarget = {x: 0, y: 0};
 let sceneOffset = {x: 0, y: 0};
 
@@ -105,21 +105,50 @@ else
 
 	function windowsUpdated ()
 	{
-		updateNumberOfCubes();
+		updateNumberOfTriangles();
 	}
 
-	function updateNumberOfCubes ()
+	// function updateNumberOftriangles ()
+	// {
+	// 	let wins = windowManager.getWindows();
+
+	// 	// remove all triangles
+	// 	triangles.forEach((c) => {
+	// 		world.remove(c);
+	// 	})
+
+	// 	triangles = [];
+
+	// 	// add new triangles based on the current window setup
+	// 	for (let i = 0; i < wins.length; i++)
+	// 	{
+	// 		let win = wins[i];
+
+	// 		let c = new t.Color();
+	// 		c.setHSL(i * .1, 1.0, .5);
+
+	// 		let s = 100 + i * 50;
+	// 		let triangle = new t.Mesh(new t.BoxGeometry(s, s, s), new t.MeshBasicMaterial({color: c , wireframe: true}));
+	// 		triangle.position.x = win.shape.x + (win.shape.w * .5);
+	// 		triangle.position.y = win.shape.y + (win.shape.h * .5);
+
+	// 		world.add(triangle);
+	// 		triangles.push(triangle);
+	// 	}
+	// }
+
+	function updateNumberOfTriangles ()
 	{
 		let wins = windowManager.getWindows();
 
-		// remove all cubes
-		cubes.forEach((c) => {
+		// remove all triangles
+		triangles.forEach((c) => {
 			world.remove(c);
 		})
 
-		cubes = [];
+		triangles = [];
 
-		// add new cubes based on the current window setup
+		// add new triangles based on the current window setup
 		for (let i = 0; i < wins.length; i++)
 		{
 			let win = wins[i];
@@ -127,13 +156,13 @@ else
 			let c = new t.Color();
 			c.setHSL(i * .1, 1.0, .5);
 
-			let s = 100 + i * 50;
-			let cube = new t.Mesh(new t.BoxGeometry(s, s, s), new t.MeshBasicMaterial({color: c , wireframe: true}));
-			cube.position.x = win.shape.x + (win.shape.w * .5);
-			cube.position.y = win.shape.y + (win.shape.h * .5);
+			let s = 100 + i * 30;
+			let triangle = new t.Mesh(new t.BoxGeometry(s, s, s), new t.MeshBasicMaterial({color: c , wireframe: true}));
+			triangle.position.x = win.shape.x + (win.shape.w * .3);
+			triangle.position.y = win.shape.y + (win.shape.h * .3);
 
-			world.add(cube);
-			cubes.push(cube);
+			world.add(triangle);
+			triangles.push(triangle);
 		}
 	}
 
@@ -164,19 +193,19 @@ else
 		let wins = windowManager.getWindows();
 
 
-		// loop through all our cubes and update their positions based on current window positions
-		for (let i = 0; i < cubes.length; i++)
+		// loop through all our triangles and update their positions based on current window positions
+		for (let i = 0; i < triangles.length; i++)
 		{
-			let cube = cubes[i];
+			let triangle = triangles[i];
 			let win = wins[i];
-			let _t = t;// + i * .2;
+			let _t = t + i * .2;
 
 			let posTarget = {x: win.shape.x + (win.shape.w * .5), y: win.shape.y + (win.shape.h * .5)}
 
-			cube.position.x = cube.position.x + (posTarget.x - cube.position.x) * falloff;
-			cube.position.y = cube.position.y + (posTarget.y - cube.position.y) * falloff;
-			cube.rotation.x = _t * .5;
-			cube.rotation.y = _t * .3;
+			triangle.position.x = triangle.position.x + (posTarget.x - triangle.position.x) * falloff;
+			triangle.position.y = triangle.position.y + (posTarget.y - triangle.position.y) * falloff;
+			triangle.rotation.x = _t * .5;
+			triangle.rotation.y = _t * .3;
 		};
 
 		renderer.render(scene, camera);
